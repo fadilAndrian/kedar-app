@@ -29,7 +29,7 @@
               <h3 class="text-lg font-medium leading-6 text-gray-900 hover:text-blue-700">Tugas</h3>
             </div>
             <div class="px-4 sm:px-0 my-3" style="cursor: pointer;">
-              <h3 class="text-lg font-medium leading-6 text-gray-900 hover:text-blue-700">Kode Kelas</h3>
+              <h3 class="text-lg font-medium leading-6 text-gray-900 hover:text-blue-700">Kode Kelas</h3><input wire.model="kode_kelas" class="text-lg font-medium leading-6 text-gray-900 disabled bg-white">
             </div>
           </div>
           <!-- end sidebar belike -->

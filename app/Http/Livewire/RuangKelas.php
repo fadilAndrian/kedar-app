@@ -128,6 +128,7 @@ class RuangKelas extends Component
     public function masukKelas($id){
     	$masuk = Kelas::find($id);
     	$this->namaKelas = $masuk->kelas;
+    	$this->kode_kelas = $masuk->kode_join_kelas;
 
     	$this->showKelas();
     }
