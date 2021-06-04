@@ -27,7 +27,7 @@
 					  	</button>
 					  	<!-- end delete button -->
 
-					    <img class="max-h-24 pb-1 w-full opacity-90 absolute top-0" style="z-index:-1" src="img/bgkelas.png" alt="" />
+					    <img class="max-h-24 pb-1 w-full opacity-90 absolute top-0" style="z-index:-1" src="img/bgkelas.PNG" alt="" />
 					    <div class="profile w-full flex m-3 ml-4 text-white">
 
 					      @if(!empty($data->guru->profile_photo_path))
