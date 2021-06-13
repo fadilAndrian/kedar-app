@@ -10,7 +10,7 @@
     <form class="mt-8 space-y-6" wire:submit.prevent="login()" method="POST">
       <input type="hidden" name="remember" value="true">
       @if(session()->has('error'))
-        <div class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 -mb-2 py-2 px-4" role="alert">
+        <div class="bg-blue-100 border border-blue-500 text-blue-700 -mb-2 py-2 px-4" role="alert">
           <p class="font-bold">Login gagal!</p>
           <p class="text-sm">{{ session('error') }}</p>
         </div>
