@@ -43,9 +43,16 @@ class Login extends Component
         // dd($auth);
 
         if (Auth::attempt(['email'=>$this->email, 'password'=>$this->password])) {
-            return redirect()->route('dashboard');
+            if (Auth()->user()->role_id == 2) {
+                return redirect()->route('ruangguru');
+            } else if (Auth()->user()->role_id == 3) {
+                return redirect()->route('ruangkelas');
+            } else {
+                return redirect()->route('admin-role');
+            }
+            
         } else {
-            session()->flash('error', 'Login gagal');
+            session()->flash('error', 'Kayaknya email atau passwordmu salah, tuh 🤔');
             return redirect()->route('login');
         }
     }

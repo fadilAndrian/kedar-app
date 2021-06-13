@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\User;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 class Profile extends Component
@@ -12,6 +13,7 @@ class Profile extends Component
 	use WithFileUploads;
 
 	public $isOpen = 0;
+    public $isOpenFoto = 0;
 
 	public $user_id;
 	public $name;
@@ -52,19 +54,15 @@ class Profile extends Component
     	// ], $messages);
 
 
-    	if (!empty($this->poto)) {
-    		$this->poto->store('public/profile_photos');
-    	}
-
     	User::updateOrCreate(['id' => $this->user_id], [
     		'name' => $this->name,
     		'no_tlp' => $this->no_tlp,
     		'nomor_identitas' => $this->nik,
     		'alamat' => $this->alamat,
     		'sekolah' => $this->sekolah,
-    		'profile_photo_path' => $this->poto->hashName(),
     	]);
     	// dd($this->poto);
+
     	$this->isClosed();
 
     	$this->user_id = "";
@@ -73,7 +71,6 @@ class Profile extends Component
     	$this->nik = "";
     	$this->alamat = "";
     	$this->sekolah = "";
-    	$this->poto = "";
     }
 
     public function edit($id){
@@ -85,7 +82,6 @@ class Profile extends Component
     	$this->nik = $user->nomor_identitas;
     	$this->alamat = $user->alamat;
     	$this->sekolah = $user->sekolah;
-    	$this->poto = $user->profile_photo_path;
 
     	$this->isOpen();
     }
@@ -97,4 +93,52 @@ class Profile extends Component
     public function isClosed(){
     	$this->isOpen = false;
     }
+
+    // UNTUK FOTO
+    public function storeFoto(){
+
+        $filename = 'poto_'.date('dmYHis').'.'.$this->poto->extension();
+        $this->poto->storeAs('public/profile_photos', $filename);
+
+        // dd($filename);
+        // dd(Auth()->user()->profile_photo_path);
+        if (Auth()->user()->profile_photo_path) {
+            Storage::disk('local')->delete('public/profile_photos/'.Auth()->user()->profile_photo_path);
+            Auth()->user()->profile_photo_path = null;
+        }
+        User::updateOrCreate(['id' => $this->user_id], [
+            'profile_photo_path' => $filename,
+        ]);
+        // dd($this->poto);
+        $this->isClosedFoto();
+    }
+
+    public function editFoto($id){
+        $user = User::find($id);
+
+        $this->user_id = $user->id;
+        $this->poto = $user->profile_photo_path;
+
+        $this->isOpenFoto();
+    }
+
+    public function deleteFoto($id){
+        $foto = User::find($id);
+
+        Storage::disk('local')->delete('public/profile_photos/'.$foto->profile_photo_path);
+
+        $foto->profile_photo_path = null;
+        $foto->save();
+    }
+
+    public function isOpenFoto(){
+        $this->isOpenFoto = true;
+    }
+
+    public function isClosedFoto(){
+        $this->poto = "";
+
+        $this->isOpenFoto = false;
+    }
+    // END UNTUK FOTO
 }

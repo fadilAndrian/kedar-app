@@ -2,8 +2,9 @@
 
   <header class="bg-white shadow">
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <input wire:model="detil_kelas_id" class="w-5/6 text-3xl font-bold text-gray-900 bg-white" disabled>
       <input wire:model="namaKelas" class="w-5/6 text-3xl font-bold text-gray-900 bg-white" disabled>
-      <input wire:model="kode_kelas" class="w-5/6 text-3xl font-bold text-gray-900 bg-white" disabled>
+      <input wire:model="kode_kelas" class="{{ auth()->user()->role_id == 2 ? '' : 'hidden' }} w-5/6 text-3xl font-bold text-gray-900 bg-white" disabled>
       <a wire:click="hideKelas()" style="cursor: pointer;" class="rounded-r-3xl rounded-l-3xl ml-28 p-2 text-l font-medium border border-gray-300 hover:bg-gray-700 hover:text-white hover:border-0">Kembali</a>
     </div>
   </header>
@@ -21,9 +22,6 @@
           <!-- sidebar belike -->
           <div class="md:col-span-1">
             <div class="px-4 sm:px-0 my-3" style="cursor: pointer;">
-              <h3 class="text-lg font-medium leading-6 text-gray-900 hover:text-blue-700">Dashboard</h3>
-            </div>
-            <div class="px-4 sm:px-0 my-3" style="cursor: pointer;">
               <h3 class="text-lg font-medium leading-6 text-gray-900 hover:text-blue-700">Bahan Belajar</h3>
             </div>
             <div class="px-4 sm:px-0 my-3" style="cursor: pointer;">
@@ -31,6 +29,10 @@
             </div>
             <div class="px-4 sm:px-0 my-3" style="cursor: pointer;">
               <h3 class="text-lg font-medium leading-6 text-gray-900 hover:text-blue-700">Kode Kelas</h3>
+            </div>
+            <div onclick="confirm('Yakin mau keluar dari kelas ini?') || event.stopImmediatePropagation()" 
+                 wire:click.prevent="keluarKelas()" class="px-4 sm:px-0 my-3 {{ auth()->user()->role_id == 3 ? '' : 'hidden' }}" style="cursor: pointer;">
+              <h3 class="text-lg font-medium leading-6 text-gray-900 hover:text-blue-700">Keluar</h3>
             </div>
           </div>
           <!-- end sidebar belike -->

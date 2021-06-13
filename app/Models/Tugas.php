@@ -9,10 +9,10 @@ class Tugas extends Model
 {
     use HasFactory;
     protected $fillable = [
-    	'kelas_id', 'tugas', 'mulai', 'akhir'
+    	'kelas_id', 'tugas', 'mulai', 'akhir', 'profile_photo_path'
     ];
 
     public function kelas(){
-    	$this->belongsTo(Kelas::class);
+    	return $this->belongsTo(Kelas::class);
     }
 }

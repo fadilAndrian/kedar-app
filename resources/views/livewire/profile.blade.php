@@ -15,14 +15,14 @@
 	  <div class="md:grid md:grid-cols-3 md:gap-6">
 	    <div class="md:col-span-1">
 	      <div class="px-4 sm:px-0">
-	        <h3 class="text-lg font-medium leading-6 text-gray-900">Personal Information</h3>
+	        <h3 class="text-lg font-medium leading-6 text-gray-900">Informasi</h3>
 	        <p class="mt-1 text-sm text-gray-600">
-	          Use a permanent address where you can receive mail.
+	          Data Diri
 	        </p>
 	      </div>
 	    </div>
 	    <div class="mb-5 md:mt-0 md:col-span-2">
-	      <form wire:submit.prevent="submit()" method="POST">
+	      <form wire:submit.prevent="store()" method="POST">
 	        <div class="shadow overflow-hidden sm:rounded-md">
 	          <div class="px-4 py-5 bg-white sm:p-6">
 	            <div class="grid grid-cols-6 gap-6">
@@ -42,13 +42,13 @@
 	              </div>
 
 	              <div class="col-span-6 sm:col-span-3 mb-2">
-	                <label for="email_address" class="block text-sm font-medium text-gray-700">Nomor Telepon</label>
+	                <label class="block text-sm font-medium text-gray-700">Nomor Telepon</label>
 	                <h3 class="{{$isOpen == true ? 'hidden' : ''}} text-2xl font-medium text-gray-900">{{ $data->no_tlp}}</h3>
 	                <input type="text" wire:model="no_tlp" id="first_name" autocomplete="given-name" class="{{$isOpen == false ? 'hidden' : ''}} mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
 	              </div>
 
 	              <div class="col-span-6 sm:col-span-3">
-	                <label for="email_address" class="block text-sm font-medium text-gray-700">Nomor Identitas</label>
+	                <label class="block text-sm font-medium text-gray-700">Nomor Identitas</label>
 	                <h3 class="{{$isOpen == true ? 'hidden' : ''}} text-2xl font-medium text-gray-900">{{ $data->nomor_identitas}}</h3>
 	                <input type="text" wire:model="nik" id="first_name" autocomplete="given-name" class="{{$isOpen == false ? 'hidden' : ''}} mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
 	              </div>
@@ -58,10 +58,52 @@
 	                <h3 class="{{$isOpen == true ? 'hidden' : ''}} text-2xl font-medium text-gray-900">{{ $data->alamat}}</h3>
 	                <textarea wire:model="alamat" id="first_name" autocomplete="given-name" class="{{$isOpen == false ? 'hidden' : ''}} mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
 	              </div>
+	            </div>
+	          </div>
+	          <div class="{{$isOpen == true ? 'hidden' : ''}} px-4 py-3 bg-gray-50 text-right sm:px-6">
+	            <a wire:click="edit({{auth()->user()->id}})" style="cursor: pointer;" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+	              Edit
+	            </a>
+	          </div>
 
-					<div class="col-span-4">
+	          <div class="{{$isOpen == false ? 'hidden' : ''}} px-4 py-3 bg-gray-50 text-right sm:px-6">
+	            <button wire:click.prevent="isClosed()" style="cursor: pointer;" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mx-2">
+	              Batal
+	            </button>
+
+	            <button wire:click.prevent="store()" style="cursor: pointer;" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+	              Simpan
+	            </button>
+	          </div>
+
+	        </div>
+	      </form>
+	    </div>
+	  </div>
+	</div>
+
+
+	<div class="mt-10 sm:mt-0">
+	  <div class="md:grid md:grid-cols-3 md:gap-6">
+	    <div class="md:col-span-1">
+	      <div class="px-4 sm:px-0">
+	        <h3 class="text-lg font-medium leading-6 text-gray-900">Foto Profil</h3>
+	        <p class="mt-1 text-sm text-gray-600">
+	          Avatar
+	        </p>
+	      </div>
+	    </div>
+	    <div class="mb-5 md:mt-0 md:col-span-2">
+	      <form enctype="multipart/form-data" wire:submit.prevent="storeFoto()" method="POST">
+	        <div class="shadow overflow-hidden sm:rounded-md">
+	          <div class="px-4 py-5 bg-white sm:p-6">
+	            <div class="grid grid-cols-6 gap-6">
+	              
+	              <input hidden type="text" wire:model="user_id">
+
+	            	<div class="col-span-4">
 					  <label class="block text-sm font-medium text-gray-700">
-					    Photo
+					    Foto
 					  </label>
 					  <div class="mt-1 flex items-center">
 					    <span class="inline-block h-40 w-40 rounded-full overflow-hidden bg-gray-100">
@@ -73,22 +115,29 @@
 					      </svg>
 					    	@endif
 					    </span>
-					    <input wire:model="poto" type="file" class="{{$isOpen == false ? 'hidden' : ''}} ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+					    <input value="" wire:model="poto" type="file" class="{{$isOpenFoto == false ? 'hidden' : ''}} ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
 					  </div>
 					</div>
 
 	            </div>
 	          </div>
-	          <div class="{{$isOpen == true ? 'hidden' : ''}} px-4 py-3 bg-gray-50 text-right sm:px-6">
-	            <a wire:click="edit({{auth()->user()->id}})" style="cursor: pointer;" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+	          <div class="{{$isOpenFoto == true ? 'hidden' : ''}} px-4 py-3 bg-gray-50 text-right sm:px-6">
+	            <a wire:click.prevent="deleteFoto({{auth()->user()->id}})" style="cursor: pointer;" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 mx-2">
+	              Hapus
+	            </a>
+	            <a wire:click="editFoto({{auth()->user()->id}})" style="cursor: pointer;" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
 	              Edit
 	            </a>
 	          </div>
 
-	          <div class="{{$isOpen == false ? 'hidden' : ''}} px-4 py-3 bg-gray-50 text-right sm:px-6">
-	            <butto wire:click="store()" style="cursor: pointer;" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+	          <div class="{{$isOpenFoto == false ? 'hidden' : ''}} px-4 py-3 bg-gray-50 text-right sm:px-6">
+	            <button wire:click.prevent="isClosedFoto()" style="cursor: pointer;" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mx-2">
+	              Batal
+	            </button>
+
+	            <button wire:click.prevent="storeFoto()" style="cursor: pointer;" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
 	              Simpan
-	            </a>
+	            </button>
 	          </div>
 
 	        </div>

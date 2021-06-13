@@ -57,7 +57,7 @@
                       class="mx-2 text-indigo-600 hover:text-indigo-900">
                     Edit
                   </button>
-                  <button wire:click="hapusRole( {{ $role->id}} )" class="text-red-600 hover:text-red-900">Hapus</button>
+                  <button wire:click="hapusRole( {{ $role->id}} )" onclick="confirm('Yakin untuk menghapus?') || event.stopImmediatePropagation()" class="text-red-600 hover:text-red-900">Hapus</button>
                 </td>
               </tr>
               @endforeach

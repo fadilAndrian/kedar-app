@@ -1,4 +1,5 @@
 <div>
+
 	<div class="{{$isMasuk==1 ? 'hidden' : ''}}">
 		<header class="bg-white shadow">
 		    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -12,6 +13,90 @@
 		  <div class="md:container md:mx-auto mt-4 mb-5">
 		  	<div class="mt-4 overflow-x-auto">
 		  		<!-- CONTENT -->
+
+
+		  		<!-- jadwal murid -->
+		  		<div class="{{auth()->user()->role_id == 3 ? '' : 'hidden'}} md:container md:mx-auto mt-4 mb-10">  
+				  <div class="flex flex-col">
+				    <!-- content -->
+				    <!-- Notif box -->
+				    <div class="rounded-sm">
+					  <div class="bg-gray-500 text-white font-bold rounded-t px-4 py-2 mx-8"> 
+					    Papan Informasi
+					  </div>
+					  <div class="border border-t-0 border-gray-400 rounded-b bg-gray-100 px-4 py-3 mx-8 text-gray-700 max-h-44 overflow-y-auto">
+					    <p>- Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+					  </div>
+					</div>
+				    <!-- end Notif box -->
+
+				    <div class="mt-4 overflow-x-auto sm:-mx-6 lg:mx-8">
+				    	<!-- SEARCH BOX -->
+				  		  <div class="mt-1 mb-4 relative space-x-2 rounded-md shadow-sm flex left-3/4 w-1/4">
+				  		    <select wire:model="searchjdwlmrd" class="focus:ring-indigo-500 focus:border-indigo-500 h-10 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md">
+				  		    	<option value="">Tampilkan semua</option>
+				  		    	<option value="Senin">Senin</option>
+				  		    	<option value="Selasa">Selasa</option>
+				  		    	<option value="Rabu">Rabu</option>
+				  		    	<option value="Kamis">Kamis</option>
+				  		    	<option value="jum'at">Jum'at</option>
+				  		    	<option value="Sabtu">Sabtu</option>
+				  		    </select>
+				  		  </div>
+				  		  <!-- END SEARCH BOX -->
+				    </div>
+
+				    <div class="mb-2 overflow-x-auto sm:-mx-6 lg:mx-8">
+				      <div class="pb-2 align-middle inline-block min-w-full sm:px-1 lg:px-1">
+
+
+				        <!-- <livewire:edit-roles/> -->
+				        <div class="md:w-full shadow overflow-y-auto max-h-72 border-b border-gray-200 sm:rounded-lg mb-2">
+				          <table class="min-w-full divide-y divide-gray-200">
+				            <thead class="bg-gray-50 sticky top-0">
+				              <tr>
+				                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+				                  Hari
+				                </th>
+				                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+				                  Pelajaran
+				                </th>
+				                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+				                  Waktu
+				                </th>
+				                <th scope="col" class="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+				                  Pengajar
+				                </th>
+				              </tr>
+				            </thead>
+				            <tbody class="bg-white divide-y divide-gray-200">
+				            @foreach($jdwlmrd as $data)
+				              <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-gray-50' : '' }}">
+				                <td class="px-6 py-4 whitespace-nowrap">
+				                  <div class="text-sm text-gray-900">{{ $data->hari }}</div>
+				                </td>
+				                <td class="px-6 py-4 whitespace-nowrap">
+				                  <div class="text-sm text-gray-900">{{ $data->kelas }} - {{ $data->matkul }}</div>
+				                </td>
+				                <td class="px-6 py-4 whitespace-nowrap">
+				                  <div class="text-sm text-gray-900">{{ substr($data->jam_mulai,0,5) }} - {{ substr($data->jam_selesai,0,5) }}</div>
+				                </td>
+				                <td class="px-6 py-4 whitespace-nowrap">
+				                  <div class="text-sm text-gray-900">{{ $data->name }}</div>
+				                </td>
+				              </tr>
+				            @endforeach
+				              <!-- More items... -->
+				            </tbody>
+				          </table>
+				        </div>
+				      </div>
+				    </div>
+			    	<!-- end content -->
+				  </div>
+				</div>
+				<!-- end jadwal murid -->
+
 
 				<!-- ruang-kelas guru -->
 		  		<div class="grid grid-cols-3 {{ auth()->user()->role_id == 2 ? '' : 'hidden' }}">
@@ -162,7 +247,7 @@
 						    <div class="buttons flex absolute bottom-0 font-bold right-0 text-xs text-gray-500 space-x-0 my-3.5 mr-3">
 
 						      <!-- masukKelas -->
-						      <div wire:click="masukKelas({{ $data->id }})" class="add border rounded-lg border-gray-300 p-1 px-4 cursor-pointer hover:bg-gray-700 hover:text-white">
+						      <div wire:click="masukKelasMurid({{ $data->id }})" class="add border rounded-lg border-gray-300 p-1 px-4 cursor-pointer hover:bg-gray-700 hover:text-white">
 						      	<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
 								</svg>
@@ -246,6 +331,16 @@
 		@if($isMasuk==1)
 			@include('livewire.masuk-kelas')
 		@endif
+
+	<!-- ALERT -->
+	  @if(session()->has('succes'))
+		<div onclick="removeToast()" id="toast" style="cursor: pointer;"
+		  class="bg-blue-200 border-l-4 border-blue-500 text-blue-700 px-8 py-1 fixed top-20 right-0" role="alert">
+		  <p class="font-bold">Hey, Kamu!</p>
+		  <p>{{ session('succes') }}</p>
+		</div>
+	  @endif 
+	<!-- END ALERT -->
 
 
 </div>

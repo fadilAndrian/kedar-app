@@ -7,22 +7,28 @@ use App\Models\Jadwal;
 use App\Models\Tugas;
 use App\Models\Kelas;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use DB;
 
 class RuangGuru extends Component
 {
+    use WithFileUploads;
 	use WithPagination;
 	public $switch = 0;
 
-	public $jadwal_id, $tugas_id;
+	public $jadwal_id;
 	public $kelas_id, $jam, $menit;
 	public $jam_masuk, $menit_masuk, $jam_keluar, $menit_keluar, $hari;
 	public $isOpenJadwal = 0, $isOpenTugas = 0;
 	public $searchJadwal, $searchTugas;
 
+    public $tugas_id, $deskripsi, $fileTugas, $deadline, $namaFile;                        /* untuk create tugas */
+
     public function render()
     {
+        // JADWAL
     	$searchParamJadwal = '%'.$this->searchJadwal.'%';
  
     	$guru = Auth()->user()->id;
@@ -34,11 +40,22 @@ class RuangGuru extends Component
     	->where([
     		['users.id', '=', $guru],
     		['jadwals.hari', 'LIKE', $searchParamJadwal]
-    	])
-    	->paginate(15);
+    	])->get();
 
-    	$tugas = Tugas::orderBy('id', 'ASC')
-    	->paginate(8);
+
+
+
+        // TUGAS
+        $searchParamTugas = '%'.$this->searchTugas.'%';
+
+    	$tugas = Tugas::orderBy('akhir', 'ASC')
+        ->join('kelas', 'kelas.id', '=', 'tugas.kelas_id')
+        ->select('kelas.kelas', 'kelas.matkul', 'tugas.tugas', 'tugas.akhir', 'tugas.profile_photo_path', 'tugas.id')
+        ->where([
+            ['guru_id', '=' ,Auth()->user()->id],
+            ['kelas', 'LIKE', $searchParamTugas]
+        ])
+        ->get();
 
     	$ruang = Kelas::all()->where('guru_id','=',$guru);
 
@@ -68,6 +85,13 @@ class RuangGuru extends Component
     }
 
     public function hideModalTugas(){
+        $this->tugas_id = "";
+        $this->kelas_id = "";
+        $this->deskripsi = "";
+        $this->deadline = "";
+        $this->namaFile = "";
+        $this->fileTugas = "";
+
     	return $this->isOpenTugas = false;
     }
 
@@ -102,6 +126,8 @@ class RuangGuru extends Component
     	$this->hari = "";
 
     	$this->hideModalJadwal();
+
+        session()->flash('succes', 'Jadwalnya dah siap! 🥳');
     }
 
     public function editJadwal($id){
@@ -120,17 +146,69 @@ class RuangGuru extends Component
 
     public function deleteJadwal($id){
 		Jadwal::find($id)->delete();
+        session()->flash('succes', 'Jadwal barusan udah dihapus, nih. 😏');
     }
 
     public function storeTugas(){
-    	// 
+    	$messages = [
+            'required' => 'Form ini kelupaan, nih.'
+        ];
+
+        $this->validate([
+            'kelas_id' => 'required',
+        ], $messages);
+
+        // upload file
+        if($this->fileTugas == null){
+            $filename = null;
+        } else {
+            $filename = $this->fileTugas->getClientOriginalName();
+            $this->fileTugas->storeAs('public/dokumen_tugas', $filename);
+        }
+        
+
+        if ($this->tugas_id!=null) {
+            $cekfile = Tugas::find($this->tugas_id);
+        // dd($cekfile);
+
+            if ($cekfile->profile_photo_path) {
+                Storage::disk('local')->delete('public/dokumen_tugas/'.$cekfile->profile_photo_path);
+            }
+        }
+
+    
+        // end upload file
+
+        $data = Tugas::updateOrCreate(['id'=>$this->tugas_id], [
+            'kelas_id' => $this->kelas_id,
+            'tugas' => $this->deskripsi,
+            'mulai' => date('Y-m-d'),
+            'akhir' => $this->deadline,
+            'profile_photo_path' => $filename,
+
+        ]);
+
+        // dd($data);
+
+        $this->hideModalTugas();
+
+        session()->flash('succes', 'Tugas sudah dipublis, yaa. 🥳');
     }
 
-    public function editTugas(){
-    	// 
+    public function editTugas($id){
+    	$data = Tugas::find($id);
+
+        $this->tugas_id = $data->id;
+        $this->kelas_id = $data->kelas_id;
+        $this->deskripsi = $data->tugas;
+        $this->deadline = $data->akhir;
+        $this->namaFile = $data->profile_photo_path;
+
+        $this->showModalTugas();
     }
 
     public function deleteTugas($id){
-		// 
+		Tugas::find($id)->delete();
+        session()->flash('succes', 'Tugas barusan udah di-cancel, ya 😏');
     }
 }

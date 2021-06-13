@@ -9,10 +9,12 @@ use App\Http\Livewire\DashboardGuru;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\GuruAdmin;
 use App\Http\Livewire\MuridAdmin;
+use App\Http\Livewire\KelasAdmin;
 use App\Http\Livewire\Profile;
 use App\Http\Livewire\RuangGuru;
 use App\Http\Livewire\RuangKelas;
 use App\Http\Livewire\MasukKelas;
+use App\Http\Livewire\Daring;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,8 +38,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function(){
 	Route::get('/guru', GuruAdmin::class)->name('admin-guru');
 	Route::get('/siswa', MuridAdmin::class)->name('admin-siswa');
 	Route::get('/roles', Roles::class)->name('admin-role');
-	Route::get('ruang-guru', RuangGuru::class);
+	Route::get('/kelas', KelasAdmin::class)->name('admin-kelas');
+	Route::get('ruang-guru', RuangGuru::class)->name('ruangguru');
 	Route::get('ruang-kelas', RuangKelas::class)->name('ruangkelas');
+	Route::get('/daring', Daring::class)->name('daring');
 	// Route::get('masuk-kelas/{id}', MasukKelas::class);
 });
 
