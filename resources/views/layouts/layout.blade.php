@@ -24,6 +24,16 @@
     <script src="{{ mix('js/app.js') }}" defer></script>
 
     <style>
+    	.ribbon {
+		    position: absolute;
+		    font-size: 8px;
+		    top: 0;
+		    right: 0;
+		    width: 100%;
+		    height: 15px;
+		    margin-top: -5px;
+		  }
+
       [x-cloak] {
         display: none;
       }
@@ -93,7 +103,7 @@
 
 	              <a href="/kelas" class="{{1 == auth()->user()->role_id ? '' : 'hidden'}} text-gray-300 hover:bg-gray-700 hover:text-white px-6 py-4 rounded-md text-sm font-medium {{'kelas' == Request()->path() ? 'bg-gray-900 text-white' : ''}}">Kelas</a>
 
-	              <a href="/daring" class="{{1 == auth()->user()->role_id ? 'hidden' : ''}} font-extrabold text-blue-500 hover:bg-blue-800 hover:text-white px-6 py-4 rounded-md text-sm font-medium {{'kelas' == Request()->path() ? 'bg-gray-900 text-white' : ''}}">Daring!</a>
+	              <button href="/daring" class="{{1 == auth()->user()->role_id ? 'hidden' : ''}} relative overflow-hidden font-extrabold text-blue-500 hover:bg-blue-800 hover:text-white px-6 py-4 rounded-md text-sm font-medium border border-blue-500 hover:border-blue-800 {{'kelas' == Request()->path() ? 'bg-gray-900 text-white' : ''}}">Daring!<div class="ribbon bg-blue-500 text-white whitespace-no-wrap px-2">coming soon</div></button>
 	              <!-- <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Reports</a> -->
 	            </div>
 	          </div>

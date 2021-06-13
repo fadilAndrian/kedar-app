@@ -25,7 +25,7 @@
 					    Papan Informasi
 					  </div>
 					  <div class="border border-t-0 border-gray-400 rounded-b bg-gray-100 px-4 py-3 mx-8 text-gray-700 max-h-44 overflow-y-auto">
-					    <p>- Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+					    <p>- Fitur ini masih dalam pengembangan</p>
 					  </div>
 					</div>
 				    <!-- end Notif box -->
