@@ -96,9 +96,18 @@ class Profile extends Component
 
     // UNTUK FOTO
     public function storeFoto(){
+        $message = [
+            'required' => 'Ini jangan ketinggalan, nih.'
+        ];
 
-        $filename = 'poto_'.date('dmYHis').'.'.$this->poto->extension();
-        $this->poto->storeAs('public/profile_photos', $filename);
+        $this->validate([
+            'poto' => 'required'
+        ], $message);
+
+        if (!empty($this->poto)) {
+            $filename = 'poto_'.date('dmYHis').'.'.$this->poto->extension();
+            $this->poto->storeAs('public/profile_photos', $filename);
+        }
 
         // dd($filename);
         // dd(Auth()->user()->profile_photo_path);
