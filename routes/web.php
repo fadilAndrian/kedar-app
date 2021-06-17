@@ -41,7 +41,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function(){
 	Route::get('/kelas', KelasAdmin::class)->name('admin-kelas');
 	Route::get('ruang-guru', RuangGuru::class)->name('ruangguru');
 	Route::get('ruang-kelas', RuangKelas::class)->name('ruangkelas');
-	Route::get('/daring', Daring::class)->name('daring');
+	Route::get('/daring', Daring::class);
 	// Route::get('masuk-kelas/{id}', MasukKelas::class);
 });
 
