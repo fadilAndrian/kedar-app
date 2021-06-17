@@ -34,7 +34,6 @@ use App\Http\Livewire\Daring;
 // })->name('dashboard');
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function(){
-	Route::get('/dashboard', Dashboard::class)->name('dashboard');
 	Route::get('/profile', Profile::class)->name('profil');
 	Route::get('/guru', GuruAdmin::class)->name('admin-guru');
 	Route::get('/siswa', MuridAdmin::class)->name('admin-siswa');
