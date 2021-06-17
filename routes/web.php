@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Livewire\Login;
 use App\Http\Livewire\Register;
 use App\Http\Livewire\Roles;
@@ -49,7 +50,14 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function(){
 
 Route::group(['middleware' => ['guest']], function(){
 	Route::get('/', function () {
-	    return view('welcome2');
+		if (Auth()->user()->role_id == 2) {
+			return view('ruang-guru');
+		} elseif (Auth()->user()->role_id == 3) {
+			return view('ruang-kelas');
+		} else {
+			return view('roles');
+		}
+	    
 	});
 	Route::get('login', Login::class)->name('login');
 	Route::get('register', Register::class)->name('register');
