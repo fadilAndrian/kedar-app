@@ -48,16 +48,14 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function(){
 // Route::get('/datauser', Users::class)->name('users');
 
 Route::group(['middleware' => ['guest']], function(){
-	Route::get('/', function () {
-		if (Auth()->user()->role_id == 2) {
-			return view('ruang-guru');
-		} elseif (Auth()->user()->role_id == 3) {
-			return view('ruang-kelas');
-		} else {
-			return view('roles');
-		}
-	    
-	});
+	if (Auth()->user()->role_id == 2) {
+		Route::get('ruang-guru', RuangGuru::class)->name('ruangguru');
+	} elseif (Auth()->user()->role_id == 3) {
+		Route::get('ruang-kelas', RuangKelas::class)->name('ruangkelas');
+	} else {
+		Route::get('/roles', Roles::class)->name('admin-role');
+	}
+	
 	Route::get('login', Login::class)->name('login');
 	Route::get('register', Register::class)->name('register');
 });
