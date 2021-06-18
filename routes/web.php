@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Livewire\Login;
 use App\Http\Livewire\Register;
 use App\Http\Livewire\Roles;
@@ -34,6 +33,7 @@ use App\Http\Livewire\Daring;
 // })->name('dashboard');
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function(){
+	Route::get('/dashboard', Dashboard::class)->name('dashboard');
 	Route::get('/profile', Profile::class)->name('profil');
 	Route::get('/guru', GuruAdmin::class)->name('admin-guru');
 	Route::get('/siswa', MuridAdmin::class)->name('admin-siswa');
@@ -48,14 +48,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function(){
 // Route::get('/datauser', Users::class)->name('users');
 
 Route::group(['middleware' => ['guest']], function(){
-	if (Auth()->user()->role_id == 2) {
-		Route::get('ruang-guru', RuangGuru::class)->name('ruangguru');
-	} elseif (Auth()->user()->role_id == 3) {
-		Route::get('ruang-kelas', RuangKelas::class)->name('ruangkelas');
-	} else {
-		Route::get('/roles', Roles::class)->name('admin-role');
-	}
-	
+	Route::get('/', function () {
+	    return view('welcome2');
+	});
 	Route::get('login', Login::class)->name('login');
 	Route::get('register', Register::class)->name('register');
 });
